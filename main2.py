@@ -1,11 +1,5 @@
 #coding: euc-kr
 
-
-################################################################
-# BOB 1±â º¯µ¿»ï, ¸ğµç ÄÚµå´Â Á÷Á¢ ÀÛ¼ºÇÏ¿´À½À» ¹àÈü´Ï´Ù. 			  #
-###############################################################
-
-
 import sys
 import re
 import os
@@ -17,8 +11,8 @@ import codecs
 tabCount=-1
 
 
-def edian2(s, addr, type):		# big edian16ºñÆ®¸¦ 	little edianÀ¸·Î º¯°æÇØÁÖ´Â ÇÔ¼ö 		
-											# typeÀÌ 0ÀÌ¸é int·Î return 1ÀÌ¸é hex·Î return 
+def edian2(s, addr, type):		# big edian16ë¹„íŠ¸ë¥¼ 	little edianìœ¼ë¡œ ë³€ê²½í•´ì£¼ëŠ” í•¨ìˆ˜ 		
+											# typeì´ 0ì´ë©´ intë¡œ return 1ì´ë©´ hexë¡œ return 
 											
 	a,b = s[addr+1].encode('hex'), s[addr].encode('hex')
 	result = "0x"+a+b
@@ -28,9 +22,9 @@ def edian2(s, addr, type):		# big edian16ºñÆ®¸¦ 	little edianÀ¸·Î º¯°æÇØÁÖ´Â ÇÔ¼
 	else:
 		return hex(result)
 	
-def edian4(s, addr, type, plus1000):		# big edian32ºñÆ®¸¦ 	little edianÀ¸·Î º¯°æÇØÁÖ´Â ÇÔ¼ö 		
-											# typeÀÌ 0ÀÌ¸é int·Î return 1ÀÌ¸é hex·Î return 
-											# plus1000ÀÌ 1ÀÌ¸é +(0x4096) 0ÀÌ¸é ±×´ë·Î  
+def edian4(s, addr, type, plus1000):		# big edian32ë¹„íŠ¸ë¥¼ 	little edianìœ¼ë¡œ ë³€ê²½í•´ì£¼ëŠ” í•¨ìˆ˜ 		
+											# typeì´ 0ì´ë©´ intë¡œ return 1ì´ë©´ hexë¡œ return 
+											# plus1000ì´ 1ì´ë©´ +(0x4096) 0ì´ë©´ ê·¸ëŒ€ë¡œ  
 	a,b,c,d = s[addr+3].encode('hex'), s[addr+2].encode('hex'), s[addr+1].encode('hex'), s[addr].encode('hex')
 	result = "0x"+a+b+c+d
 	result = int(result,0)
@@ -41,9 +35,9 @@ def edian4(s, addr, type, plus1000):		# big edian32ºñÆ®¸¦ 	little edianÀ¸·Î º¯°æ
 	else:
 		return hex(result)
 	
-def edian8(s, addr, type, plus1000):		# big edian 64ºñÆ®	little edianÀ¸·Î º¯°æÇØÁÖ´Â ÇÔ¼ö 		
-											# typeÀÌ 0ÀÌ¸é int·Î return 1ÀÌ¸é hex·Î return 
-											# plus1000ÀÌ 1ÀÌ¸é +(0x4096) 0ÀÌ¸é ±×´ë·Î  
+def edian8(s, addr, type, plus1000):		# big edian 64ë¹„íŠ¸	little edianìœ¼ë¡œ ë³€ê²½í•´ì£¼ëŠ” í•¨ìˆ˜ 		
+											# typeì´ 0ì´ë©´ intë¡œ return 1ì´ë©´ hexë¡œ return 
+											# plus1000ì´ 1ì´ë©´ +(0x4096) 0ì´ë©´ ê·¸ëŒ€ë¡œ  
 	a,b,c,d,e,f,g,h = s[addr+7].encode('hex'), s[addr+6].encode('hex'), s[addr+5].encode('hex'), s[addr+4].encode('hex'), s[addr+3].encode('hex'), s[addr+2].encode('hex'), s[addr+1].encode('hex'), s[addr].encode('hex')
 	result = "0x"+a+b+c+d+e+f+g+h
 	result = int(result,0)
@@ -56,7 +50,7 @@ def edian8(s, addr, type, plus1000):		# big edian 64ºñÆ®	little edianÀ¸·Î º¯°æÇØ
 	
 	
 
-def getNTtime(dt):				# 64ºñÆ® NT time stamp¸¦ hex 64ºñÆ®·Î ÀÔ·Â¹Ş¾Æ ³¯Â¥·Î Ãâ·ÂÇØÁÖ´Â ÇÔ¼ö 
+def getNTtime(dt):				# 64ë¹„íŠ¸ NT time stampë¥¼ hex 64ë¹„íŠ¸ë¡œ ì…ë ¥ë°›ì•„ ë‚ ì§œë¡œ ì¶œë ¥í•´ì£¼ëŠ” í•¨ìˆ˜ 
     microseconds = int(dt, 16) / 10
     seconds, microseconds = divmod(microseconds, 1000000)
     days, seconds = divmod(seconds, 86400)
@@ -64,16 +58,16 @@ def getNTtime(dt):				# 64ºñÆ® NT time stamp¸¦ hex 64ºñÆ®·Î ÀÔ·Â¹Ş¾Æ ³¯Â¥·Î Ãâ·Â
 	
 	
 	
-def getSubkey(s,addr):			# subkey ÀÇ ÁÖ¼Ò¸¦ ¹Ş¾Æ¼­ ÀÌ¸§°ú NT timeÀ» Ãâ·ÂÇØÁÖ´Â ÇÔ¼ö 
+def getSubkey(s,addr):			# subkey ì˜ ì£¼ì†Œë¥¼ ë°›ì•„ì„œ ì´ë¦„ê³¼ NT timeì„ ì¶œë ¥í•´ì£¼ëŠ” í•¨ìˆ˜ 
 	global tabCount
 	nk = s.find("nk",int(addr,0))
 	services=nk
-	namelen=edian4(s,nk+72,0,0)		# nk¸ÅÁ÷³Ñ¹ö 72¹ÙÀÌÆ® µÚ¿¡ ÀÖ´Â Å°³×ÀÓ ±æÀÌ°ªÀ» °¡Á®¿Â´Ù  
-	nk += 4							#NK¸ÅÁ÷³Ñ¹ö offsetÀ» Ã£¾Æ¼­ 4¹ÙÀÌÆ® µÚ¿¡ÀÖ´Â NT time À§Ä¡·Î ÀÌµ¿ 
-	timestamp=edian8(s,nk,1,0)		# ¸®Æ²¿¡µğ¾ÈÀ¸·Î ¹Ù²ã¼­ hex·Î Ãâ·Â 
-	dataCount = edian4(s,services+36,0,0)	# nk ¸ÅÁ÷³Ñ¹ö¿¡¼­ 36¹ÙÀÌÆ® µÚ¿¡ÀÖ´Â vkµ¥ÀÌÅÍÀÇ °³¼ö¸¦ ÀĞ¾î¿Â´Ù 
+	namelen=edian4(s,nk+72,0,0)		# nkë§¤ì§ë„˜ë²„ 72ë°”ì´íŠ¸ ë’¤ì— ìˆëŠ” í‚¤ë„¤ì„ ê¸¸ì´ê°’ì„ ê°€ì ¸ì˜¨ë‹¤  
+	nk += 4							#NKë§¤ì§ë„˜ë²„ offsetì„ ì°¾ì•„ì„œ 4ë°”ì´íŠ¸ ë’¤ì—ìˆëŠ” NT time ìœ„ì¹˜ë¡œ ì´ë™ 
+	timestamp=edian8(s,nk,1,0)		# ë¦¬í‹€ì—ë””ì•ˆìœ¼ë¡œ ë°”ê¿”ì„œ hexë¡œ ì¶œë ¥ 
+	dataCount = edian4(s,services+36,0,0)	# nk ë§¤ì§ë„˜ë²„ì—ì„œ 36ë°”ì´íŠ¸ ë’¤ì—ìˆëŠ” vkë°ì´í„°ì˜ ê°œìˆ˜ë¥¼ ì½ì–´ì˜¨ë‹¤ 
 	dataList = edian4(s,services+40,0,1)##################################
-	nk += 72								# ¸Ç¸¶Áö¸·ÀÇ nkÀÇ ÀÌ¸§ºÎºĞÀ¸·Î ÀÌµ¿ 
+	nk += 72								# ë§¨ë§ˆì§€ë§‰ì˜ nkì˜ ì´ë¦„ë¶€ë¶„ìœ¼ë¡œ ì´ë™ 
 	nk_to=nk		
 	#wf.write(hex(services)+"	")
 	tabCount+=1	
@@ -82,9 +76,9 @@ def getSubkey(s,addr):			# subkey ÀÇ ÁÖ¼Ò¸¦ ¹Ş¾Æ¼­ ÀÌ¸§°ú NT timeÀ» Ãâ·ÂÇØÁÖ´Â Ç
 		wf.write("	")
 		tabi-=1
 	tabi=tabCount
-	wf.write(s[nk:nk+namelen])		# name Ãâ·Â  namelen ±æÀÌ¸¸Å­  
+	wf.write(s[nk:nk+namelen])		# name ì¶œë ¥  namelen ê¸¸ì´ë§Œí¼  
 	wf.write("	")
-	#wf.write(str(dataCount))		#µğ¹ö±ëÀ» À§ÇÑ Ãâ·Â 
+	#wf.write(str(dataCount))		#ë””ë²„ê¹…ì„ ìœ„í•œ ì¶œë ¥ 
 	#wf.write(" "+hex(dataList))
 	getvkdata(s,dataList,dataCount)
 	wf.write("	\r\n")
@@ -92,8 +86,8 @@ def getSubkey(s,addr):			# subkey ÀÇ ÁÖ¼Ò¸¦ ¹Ş¾Æ¼­ ÀÌ¸§°ú NT timeÀ» Ãâ·ÂÇØÁÖ´Â Ç
 	forwardSubkey(s,services)
 	tabCount-=1
 
-def getvkdata(s,dataList,dataCount):		#  vk·¹ÄÚµå¸¦ ÆÄ½ÌÇØ¼­ Ãâ·ÂÇØÁÖ´Â ÇÔ¼ö 
-	global tabCount								#Æ®¸®±¸Á¶¸¦ Çü¼ºÇÒ ÅÇÀ» ±Û·Î¹úº¯¼ö·Î ¼±¾ğ  
+def getvkdata(s,dataList,dataCount):		#  vkë ˆì½”ë“œë¥¼ íŒŒì‹±í•´ì„œ ì¶œë ¥í•´ì£¼ëŠ” í•¨ìˆ˜ 
+	global tabCount								#íŠ¸ë¦¬êµ¬ì¡°ë¥¼ í˜•ì„±í•  íƒ­ì„ ê¸€ë¡œë²Œë³€ìˆ˜ë¡œ ì„ ì–¸  
 	while dataCount:
 		dataList+=4
 		services=edian4(s,dataList,0,1)
@@ -106,7 +100,7 @@ def getvkdata(s,dataList,dataCount):		#  vk·¹ÄÚµå¸¦ ÆÄ½ÌÇØ¼­ Ãâ·ÂÇØÁÖ´Â ÇÔ¼ö
 		dataname= s[services+20:services+20+namelen]
 		
 						
-		wf.write("\r\n")								#ÅÇÀ¸·Î Æ®¸®±¸Á¶ Çü¼º  
+		wf.write("\r\n")								#íƒ­ìœ¼ë¡œ íŠ¸ë¦¬êµ¬ì¡° í˜•ì„±  
 		tabCount+=4
 		tabi=tabCount
 		while tabi:						
@@ -117,11 +111,11 @@ def getvkdata(s,dataList,dataCount):		#  vk·¹ÄÚµå¸¦ ÆÄ½ÌÇØ¼­ Ãâ·ÂÇØÁÖ´Â ÇÔ¼ö
 		
 		
 		wf.write("	"+dataname+"	")
-		#wf.write(" "+hex(datatype))					#µğ¹ö±ëÀ» À§ÇÑ Ãâ·Â  
-		#wf.write(" "+str(datalen)+" ")					#µğ¹ö±ëÀ» À§ÇÑ Ãâ·Â  
+		#wf.write(" "+hex(datatype))					#ë””ë²„ê¹…ì„ ìœ„í•œ ì¶œë ¥  
+		#wf.write(" "+str(datalen)+" ")					#ë””ë²„ê¹…ì„ ìœ„í•œ ì¶œë ¥  
 		realdata=""
 		
-		if datatype==4:									##vk ·¹ÄÚµå°ªÁß ÇØ´ç °ªÀÇ ÀÎÄÚµù ¿É¼Ç¿¡ µû¸¥ Ãâ·Â ¼³
+		if datatype==4:									##vk ë ˆì½”ë“œê°’ì¤‘ í•´ë‹¹ ê°’ì˜ ì¸ì½”ë”© ì˜µì…˜ì— ë”°ë¥¸ ì¶œë ¥ ì„¤
 			wf.write(" "+hex(dataAddr-4096))
 		elif datatype==3:
 			if datalen>1500: datalen=1500
@@ -145,11 +139,11 @@ def getvkdata(s,dataList,dataCount):		#  vk·¹ÄÚµå¸¦ ÆÄ½ÌÇØ¼­ Ãâ·ÂÇØÁÖ´Â ÇÔ¼ö
 def forwardSubkey(s,services):
 	global tabCount
 	services+=20
-	subkeyCnt = edian4(s, services,0,0)		# subkey°³¼ö È¹µæ 		
-	services+=8								# NK·¹ÄÚµå¿¡¼­ ¸¶Áö¸· key name 48¹ÙÀÌÆ® Àü¿¡ subkeylistÀÇ pointer°¡ Á¸ÀçÇÏ¹Ç·Î +8 ÀÌµ¿ 
-	listpoint=edian4(s,services,0,1)	# sublist pointer·Î ÀÌµ¿ÇÏ¿© ¸®Æ²¿¡µğ¾È Àû¿ë ¹× +1000  ÇÑ °ª ¾ò±â 
-	lh=s.find("lh",listpoint)			# sublist pointer¿¡¼­ magic numberÀÎ lh¸¦ Ã£±â  
-	lh+=4								# subkeylist°¡ Á¸ÀçÇÏ´Â  lh magicnumber¿¡¼­ 4¹ÙÀÌÆ® µÚ·Î  ÀÌµ¿
+	subkeyCnt = edian4(s, services,0,0)		# subkeyê°œìˆ˜ íšë“ 		
+	services+=8								# NKë ˆì½”ë“œì—ì„œ ë§ˆì§€ë§‰ key name 48ë°”ì´íŠ¸ ì „ì— subkeylistì˜ pointerê°€ ì¡´ì¬í•˜ë¯€ë¡œ +8 ì´ë™ 
+	listpoint=edian4(s,services,0,1)	# sublist pointerë¡œ ì´ë™í•˜ì—¬ ë¦¬í‹€ì—ë””ì•ˆ ì ìš© ë° +1000  í•œ ê°’ ì–»ê¸° 
+	lh=s.find("lh",listpoint)			# sublist pointerì—ì„œ magic numberì¸ lhë¥¼ ì°¾ê¸°  
+	lh+=4								# subkeylistê°€ ì¡´ì¬í•˜ëŠ”  lh magicnumberì—ì„œ 4ë°”ì´íŠ¸ ë’¤ë¡œ  ì´ë™
 	
 	while 1 :
 		if 0 >= subkeyCnt : break
@@ -166,9 +160,9 @@ wf=open("services_key_value_data.txt","wb")
 filesize=os.path.getsize("SYSTEM")	
 
 s=f.read()
-services=s.find("services")	# services ½ºÆ®¸µÀÌ Á¸ÀçÇÏ´Â 0x1220 ÀÇ offset°ª
-f.seek(services)			# ÇØ´ç offset°ªÀ¸·Î ÀÌµ¿ 
-services-=76				# NK·¹ÄÚµå¿¡¼­ ¸¶Áö¸· key name 76¹ÙÀÌÆ® Àü¿¡ nk ¸ÅÁ÷³Ñ¹ö°¡ Á¸ÀçÇÏ¹Ç·Î -76¸¸Å­ ÀÌµ¿  
+services=s.find("services")	# services ìŠ¤íŠ¸ë§ì´ ì¡´ì¬í•˜ëŠ” 0x1220 ì˜ offsetê°’
+f.seek(services)			# í•´ë‹¹ offsetê°’ìœ¼ë¡œ ì´ë™ 
+services-=76				# NKë ˆì½”ë“œì—ì„œ ë§ˆì§€ë§‰ key name 76ë°”ì´íŠ¸ ì „ì— nk ë§¤ì§ë„˜ë²„ê°€ ì¡´ì¬í•˜ë¯€ë¡œ -76ë§Œí¼ ì´ë™  
 forwardSubkey(s,services)
 
 
@@ -178,7 +172,7 @@ wf.close()
 
 
 ################################################################
-# BOB 1±â º¯µ¿»ï, ¸ğµç ÄÚµå´Â Á÷Á¢ ÀÛ¼ºÇÏ¿´À½À» ¹àÈü´Ï´Ù. 			  #
+# BOB 1ê¸° ë³€ë™ì‚¼, ëª¨ë“  ì½”ë“œëŠ” ì§ì ‘ ì‘ì„±í•˜ì˜€ìŒì„ ë°í™ë‹ˆë‹¤. 			  #
 ###############################################################
 
 
