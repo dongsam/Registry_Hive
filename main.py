@@ -1,7 +1,4 @@
 #coding: euc-kr
-################################################################
-# BOB 1±â º¯µ¿»ï, ¸ğµç ÄÚµå´Â Á÷Á¢ ÀÛ¼ºÇÏ¿´À½À» ¹àÈü´Ï´Ù. 			  #
-###############################################################
 
 
 
@@ -15,9 +12,9 @@ import datetime
 
 
 
-def edian4(s, addr, type, plus1000):		# big edian32ºñÆ®¸¦ 	little edianÀ¸·Î º¯°æÇØÁÖ´Â ÇÔ¼ö 		
-											# typeÀÌ 0ÀÌ¸é int·Î return 1ÀÌ¸é hex·Î return 
-											# plus1000ÀÌ 1ÀÌ¸é +(0x4096) 0ÀÌ¸é ±×´ë·Î  
+def edian4(s, addr, type, plus1000):		# big edian32ë¹„íŠ¸ë¥¼ 	little edianìœ¼ë¡œ ë³€ê²½í•´ì£¼ëŠ” í•¨ìˆ˜ 		
+											# typeì´ 0ì´ë©´ intë¡œ return 1ì´ë©´ hexë¡œ return 
+											# plus1000ì´ 1ì´ë©´ +(0x4096) 0ì´ë©´ ê·¸ëŒ€ë¡œ  
 	a,b,c,d = s[addr+3].encode('hex'), s[addr+2].encode('hex'), s[addr+1].encode('hex'), s[addr].encode('hex')
 	result = "0x"+a+b+c+d
 	result = int(result,0)
@@ -28,9 +25,9 @@ def edian4(s, addr, type, plus1000):		# big edian32ºñÆ®¸¦ 	little edianÀ¸·Î º¯°æ
 	else:
 		return hex(result)
 	
-def edian8(s, addr, type, plus1000):		# big edian 64ºñÆ®	little edianÀ¸·Î º¯°æÇØÁÖ´Â ÇÔ¼ö 		
-											# typeÀÌ 0ÀÌ¸é int·Î return 1ÀÌ¸é hex·Î return 
-											# plus1000ÀÌ 1ÀÌ¸é +(0x4096) 0ÀÌ¸é ±×´ë·Î  
+def edian8(s, addr, type, plus1000):		# big edian 64ë¹„íŠ¸	little edianìœ¼ë¡œ ë³€ê²½í•´ì£¼ëŠ” í•¨ìˆ˜ 		
+											# typeì´ 0ì´ë©´ intë¡œ return 1ì´ë©´ hexë¡œ return 
+											# plus1000ì´ 1ì´ë©´ +(0x4096) 0ì´ë©´ ê·¸ëŒ€ë¡œ  
 	a,b,c,d,e,f,g,h = s[addr+7].encode('hex'), s[addr+6].encode('hex'), s[addr+5].encode('hex'), s[addr+4].encode('hex'), s[addr+3].encode('hex'), s[addr+2].encode('hex'), s[addr+1].encode('hex'), s[addr].encode('hex')
 	result = "0x"+a+b+c+d+e+f+g+h
 	result = int(result,0)
@@ -43,7 +40,7 @@ def edian8(s, addr, type, plus1000):		# big edian 64ºñÆ®	little edianÀ¸·Î º¯°æÇØ
 	
 	
 
-def getNTtime(dt):				# 64ºñÆ® NT time stamp¸¦ hex 64ºñÆ®·Î ÀÔ·Â¹Ş¾Æ ³¯Â¥·Î Ãâ·ÂÇØÁÖ´Â ÇÔ¼ö 
+def getNTtime(dt):				# 64ë¹„íŠ¸ NT time stampë¥¼ hex 64ë¹„íŠ¸ë¡œ ì…ë ¥ë°›ì•„ ë‚ ì§œë¡œ ì¶œë ¥í•´ì£¼ëŠ” í•¨ìˆ˜ 
     microseconds = int(dt, 16) / 10
     seconds, microseconds = divmod(microseconds, 1000000)
     days, seconds = divmod(seconds, 86400)
@@ -51,17 +48,17 @@ def getNTtime(dt):				# 64ºñÆ® NT time stamp¸¦ hex 64ºñÆ®·Î ÀÔ·Â¹Ş¾Æ ³¯Â¥·Î Ãâ·Â
 	
 	
 	
-def getSubkey(s,addr):			# subkey ÀÇ ÁÖ¼Ò¸¦ ¹Ş¾Æ¼­ ÀÌ¸§°ú NT timeÀ» Ãâ·ÂÇØÁÖ´Â ÇÔ¼ö 
+def getSubkey(s,addr):			# subkey ì˜ ì£¼ì†Œë¥¼ ë°›ì•„ì„œ ì´ë¦„ê³¼ NT timeì„ ì¶œë ¥í•´ì£¼ëŠ” í•¨ìˆ˜ 
 	nk = s.find("nk",int(addr,0))
-	namelen=edian4(s,nk+72,0,0)		# nk¸ÅÁ÷³Ñ¹ö 72¹ÙÀÌÆ® µÚ¿¡ ÀÖ´Â Å°³×ÀÓ ±æÀÌ°ªÀ» °¡Á®¿Â´Ù  
-	nk += 4							#NK¸ÅÁ÷³Ñ¹ö offsetÀ» Ã£¾Æ¼­ 4¹ÙÀÌÆ® µÚ¿¡ÀÖ´Â NT time À§Ä¡·Î ÀÌµ¿ 
-	timestamp=edian8(s,nk,1,0)		# ¸®Æ²¿¡µğ¾ÈÀ¸·Î ¹Ù²ã¼­ hex·Î Ãâ·Â 
+	namelen=edian4(s,nk+72,0,0)		# nkë§¤ì§ë„˜ë²„ 72ë°”ì´íŠ¸ ë’¤ì— ìˆëŠ” í‚¤ë„¤ì„ ê¸¸ì´ê°’ì„ ê°€ì ¸ì˜¨ë‹¤  
+	nk += 4							#NKë§¤ì§ë„˜ë²„ offsetì„ ì°¾ì•„ì„œ 4ë°”ì´íŠ¸ ë’¤ì—ìˆëŠ” NT time ìœ„ì¹˜ë¡œ ì´ë™ 
+	timestamp=edian8(s,nk,1,0)		# ë¦¬í‹€ì—ë””ì•ˆìœ¼ë¡œ ë°”ê¿”ì„œ hexë¡œ ì¶œë ¥ 
 	
 	nk += 72
 	
 	wf.write(s[nk:nk+namelen])
 	wf.write("				")
-	wf.write(str(getNTtime(timestamp)))   # ¾Æ±î ÀĞÀº timestamp°ªÀ» ÇÔ¼ö¸¦ ÅëÇØ ¸¶Áö¸· ¾²¿©Áø ½Ã°£ È¹µæ  
+	wf.write(str(getNTtime(timestamp)))   # ì•„ê¹Œ ì½ì€ timestampê°’ì„ í•¨ìˆ˜ë¥¼ í†µí•´ ë§ˆì§€ë§‰ ì“°ì—¬ì§„ ì‹œê°„ íšë“  
 	wf.write("(UCT)\r\n")
 	
 #for file in sys.argv[1:]:	
@@ -72,20 +69,20 @@ filesize=os.path.getsize("SYSTEM")
 #print "This SYSTEM file is %d byte" % filesize		
 
 s=f.read()
-services=s.find("services")	# services ½ºÆ®¸µÀÌ Á¸ÀçÇÏ´Â 0x1220 ÀÇ offset°ª
-f.seek(services)			# ÇØ´ç offset°ªÀ¸·Î ÀÌµ¿ 
-f.seek(-56,1)				# NK·¹ÄÚµå¿¡¼­ ¸¶Áö¸· key name 56¹ÙÀÌÆ® Àü¿¡ subkey°³°¡ Á¸ÀçÇÏ¹Ç·Î -56 ÀÌµ¿ 
-subkeyCnt = edian4(s, f.tell(),0,0)		# subkey°³¼ö È¹µæ 
-f.seek(8,1)							# NK·¹ÄÚµå¿¡¼­ ¸¶Áö¸· key name 48¹ÙÀÌÆ® Àü¿¡ subkeylistÀÇ pointer°¡ Á¸ÀçÇÏ¹Ç·Î +8 ÀÌµ¿ 
-listpoint=edian4(s,f.tell(),0,1)	# sublist pointer·Î ÀÌµ¿ÇÏ¿© ¸®Æ²¿¡µğ¾È Àû¿ë ¹× +1000  ÇÑ °ª ¾ò±â 
-f.seek(listpoint)					# ÇØ´ç sublist pointer·Î ÀÌµ¿ 
+services=s.find("services")	# services ìŠ¤íŠ¸ë§ì´ ì¡´ì¬í•˜ëŠ” 0x1220 ì˜ offsetê°’
+f.seek(services)			# í•´ë‹¹ offsetê°’ìœ¼ë¡œ ì´ë™ 
+f.seek(-56,1)				# NKë ˆì½”ë“œì—ì„œ ë§ˆì§€ë§‰ key name 56ë°”ì´íŠ¸ ì „ì— subkeyê°œê°€ ì¡´ì¬í•˜ë¯€ë¡œ -56 ì´ë™ 
+subkeyCnt = edian4(s, f.tell(),0,0)		# subkeyê°œìˆ˜ íšë“ 
+f.seek(8,1)							# NKë ˆì½”ë“œì—ì„œ ë§ˆì§€ë§‰ key name 48ë°”ì´íŠ¸ ì „ì— subkeylistì˜ pointerê°€ ì¡´ì¬í•˜ë¯€ë¡œ +8 ì´ë™ 
+listpoint=edian4(s,f.tell(),0,1)	# sublist pointerë¡œ ì´ë™í•˜ì—¬ ë¦¬í‹€ì—ë””ì•ˆ ì ìš© ë° +1000  í•œ ê°’ ì–»ê¸° 
+f.seek(listpoint)					# í•´ë‹¹ sublist pointerë¡œ ì´ë™ 
 #print hex(f.tell())					
-lh=s.find("lh",f.tell())			# sublist pointer¿¡¼­ magic numberÀÎ lh¸¦ Ã£±â 
-f.seek(lh+4)							# subkeylist°¡ Á¸ÀçÇÏ´Â  lh magicnumber¿¡¼­ 4¹ÙÀÌÆ® µÚ·Î  ÀÌµ¿ 
+lh=s.find("lh",f.tell())			# sublist pointerì—ì„œ magic numberì¸ lhë¥¼ ì°¾ê¸° 
+f.seek(lh+4)							# subkeylistê°€ ì¡´ì¬í•˜ëŠ”  lh magicnumberì—ì„œ 4ë°”ì´íŠ¸ ë’¤ë¡œ  ì´ë™ 
 #print hex(f.tell())
 
-#nk=s.find("nk",f.tell())	# ÇöÀç offset°ª À§Ä¡¿¡¼­ºÎ nk ¸¦ Å½»ö 
-#f.seek(nk)					# ÇØ´ç offset °ªÀ¸·Î ÀÌµ¿ 
+#nk=s.find("nk",f.tell())	# í˜„ì¬ offsetê°’ ìœ„ì¹˜ì—ì„œë¶€ nk ë¥¼ íƒìƒ‰ 
+#f.seek(nk)					# í•´ë‹¹ offset ê°’ìœ¼ë¡œ ì´ë™ 
 
 
 
@@ -114,6 +111,6 @@ wf.close()
 
 
 ################################################################
-# BOB 1±â º¯µ¿»ï, ¸ğµç ÄÚµå´Â Á÷Á¢ ÀÛ¼ºÇÏ¿´À½À» ¹àÈü´Ï´Ù. 			  #
+# BOB 1ê¸° ë³€ë™ì‚¼, ëª¨ë“  ì½”ë“œëŠ” ì§ì ‘ ì‘ì„±í•˜ì˜€ìŒì„ ë°í™ë‹ˆë‹¤. 			  #
 ###############################################################
 
